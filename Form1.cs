@@ -31,6 +31,7 @@ namespace Reversi
             this.aantal = 0;
             this.richtingx = 0;
             this.richtingy = 0;
+            // beginwaardes vastgezet
             for (int i = 0; i < vert; i++)
             {
 
@@ -83,7 +84,7 @@ namespace Reversi
                             if (mogelijk(a, b))
                             {
                                 this.vak[a, b] = beurt;
-                                slastenen(a, b, this.richtingx, this.richtingy, this.aantal);
+                                slastenen(a, b);
                                 //aanpasinrichting(a, b);
 
                                 if (beurt == 1)
@@ -153,13 +154,47 @@ namespace Reversi
             }
             return false;
         }
-        
-        private void slastenen (int x, int y, int dx, int dy, int a)
+
+        int afstand(int x, int y, int dx, int dy)
         {
-            for (int b = 1; b < a; b++)
+            for (int a = 1; a < 6; a++)
             {
-                vak[x + b * dx, y + b * dy] = beurt;
+                if ((x + a * dx < hor && y + a * dy < vert) && (x + a * dx >= 0 && y + a * dy >= 0))
+                {
+                    if (vak[x + a * dx, y + a * dy] == beurt)
+                    {
+                        return a;
+                    }
+                    if (vak[x + a * dx, y + a * dy] == 0)
+                        return 0;
+                }
             }
+            return 0;
+        }
+
+        private void slastenen (int x, int y)
+        {
+                for (int dx = -1; dx < 2; dx++)
+                {
+                    for (int dy = -1; dy < 2; dy++)
+                    {
+
+                        if ((x + dx < hor && y + dy < vert) && (x + dx >= 0 && y + dy >= 0))
+                        {
+                            if (vak[x + dx, y + dy] != beurt && vak[x + dx, y + dy] != 0)
+                            {
+                                int a = this.afstand(x, y, dx, dy);
+                                {
+                                    for (int b = 1; b < a; b++)
+                                    {
+                                        vak[x + b * dx, y + b * dy] = beurt;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
         }
         
 
